@@ -22,7 +22,7 @@ pass, do not implement; classify and hand off instead.
 
 - `work` is an optional guidance adapter. Use it when available to synthesize
   vault, Linear, GitHub, Slack, and code context, but do not make the skill
-  depend on xBanker-specific work surfaces.
+  depend on project-specific work surfaces.
 - `acceptance`, `e2e-test`, `spark-loop`, `build`, and `frontier-loop` are
   optional adjacent skills. Use them only when available and appropriate;
   otherwise perform the Story Loop responsibility directly or emit a handoff.
@@ -396,6 +396,10 @@ answers what the evidence proves. Screenshots without a verdict are weak memory.
   Alignment Review before promotion.
 - Do not treat code, tests, screenshots, or stale docs as product intent by
   themselves.
+- Do not treat the storyboard itself as product intent. Before verifying or
+  promoting an existing story, re-check at least one attached authority
+  source; an old row, prior evidence, or a prior screenshot cannot certify
+  that a promise is still intended.
 - Do not run broad exploratory QA sweeps and call them story verification.
 - Do not close disputes silently.
 - Do not delete or overwrite prior evidence unless replacing a known-bad capture

@@ -59,7 +59,7 @@ Also invoke to **retrofit a drifting existing loop** that shows any of:
 
 ## What this skill produces
 
-Three files, all in `loop/` at the repo root:
+Four files, all in `loop/` at the repo root:
 
 ### 1. `loop/PROMPT.md`
 
@@ -80,6 +80,11 @@ Hard rule: every score above 2 requires citation evidence.
 Phase, iteration counter, current open seams, last action, and a `Next
 action: HALT` exit hatch the user controls. Replaces itself as the loop
 diagnoses imbalance each firing.
+
+### 4. `loop/README.md`
+
+How to fire the loop, how to tune the rubric, how to halt, and what
+milestones look like.
 
 ## The 11 green-field invariants (encoded in the emitted prompt)
 
@@ -214,17 +219,19 @@ When invoked, perform these steps:
 3. **Pick an initial rubric (8–12 criteria).** Cover at minimum: artifact
    clarity, narrative/structural coherence, density-vs-emptiness, pacing,
    and an "audience comprehension" axis. Concrete anchors per criterion.
-4. **Write `loop/PROMPT.md`** encoding all 10 invariants above plus a
+4. **Write `loop/PROMPT.md`** encoding all 11 invariants above plus a
    capability-list specific to the project's domain. The prompt should be
    directly invokable as `/loop Read ./loop/PROMPT.md and follow its
    instructions.`
 5. **Write `loop/STATE.md`** with phase=0 (bootstrap), iteration=0, and
-   `Next action: scaffold first artifact, populate initial RUBRIC anchors,
-   render iteration-0 with no scoring`.
+   `Next action: build RUBRIC.md v0.1 with concrete anchors and
+   per-criterion evidence rules; do not render a production artifact until
+   the rubric exists` (invariant 1 — evaluator scaffolding precedes
+   artifact).
 6. **Write `loop/README.md`** documenting how to fire, how to tune the
    rubric, how to halt, and what milestones look like.
 7. **Print to user**: the one-liner to fire it, plus 2–3 sentences naming
-   *which* of the 10 invariants are most likely to bite this specific
+   *which* of the 11 invariants are most likely to bite this specific
    project given its domain.
 
 ## Retrofit procedure (drifting existing loop)
@@ -257,8 +264,8 @@ When invoked on a drifting loop:
 
 ## Provenance
 
-This skill was extracted from a real project (`/Users/provi/Development/_projs/stroke`,
-April 2026) that started with "build me something Kurzgesagt-adjacent" and
-ran 230+ iterations through 8 phase-shifts. Every invariant above corresponds
-to a failure the loop hit the hard way. The retro lives at
-`loop/META-RETRO.md` in that repo as anchored evidence.
+This skill was extracted from a real project (a Kurzgesagt-adjacent video
+engine, April 2026) that started with "build me something Kurzgesagt-adjacent"
+and ran 230+ iterations through 8 phase-shifts. Every invariant above
+corresponds to a failure the loop hit the hard way; the retro lives in that
+project's `loop/META-RETRO.md` as anchored evidence.

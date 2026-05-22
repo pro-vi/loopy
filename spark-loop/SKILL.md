@@ -72,12 +72,26 @@ Before emitting a Spark prompt, inspect:
 
 Classify the repo:
 
-- **closure-ready**: cheap inner channel exists, at least one narrow proof
-  channel exists, and there is a live seam inventory
-- **partial-closure**: cheap inner channel exists, but one proof surface is
-  missing; one bootstrap move is allowed
-- **not-fit**: no cheap inner channel, no narrow proof channel, or no credible
-  seam inventory; use `frontier-loop` instead
+- **closure-ready**: a cheap inner channel exists, at least one
+  *discriminative* narrow proof channel exists (one that can distinguish
+  correct from incorrect behavior for a named anchor — not merely a green
+  command), and there is at least one *admissible* live anchor (see below).
+  No product semantics, architecture, or evaluator shape needs discovery.
+- **partial-closure**: as above but exactly one narrow proof surface is
+  missing; **one** bootstrap move is allowed for the whole run — not one
+  per seam — and only to build the smallest proof surface for an
+  already-admissible anchor. If the bootstrap needs architectural search,
+  evaluator infrastructure, or multi-subsystem work, the repo is `not-fit`.
+- **not-fit**: no cheap inner channel, no discriminative proof channel, no
+  admissible live anchor, or the work needs evaluator/architecture
+  discovery; route to `frontier-loop`.
+
+An **admissible live anchor** names a specific current evidence item — an
+open review finding, a failing/flaky test with a command, an operator bug
+with a reproducible symptom, a measured regression on a named path, or a
+known false-green with a concrete wrong behavior. A generic seam family, a
+TODO, broad dissatisfaction, or a self-authored hypothesis is not
+admissible. If no admissible anchor exists, the repo is `not-fit`.
 
 ## Derivation procedure
 

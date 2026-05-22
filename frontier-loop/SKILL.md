@@ -76,10 +76,17 @@ Walk the ramp stage checklist (0–9) in
 [`references/evaluator-maturity.md`](references/evaluator-maturity.md#ramp-stages).
 Identify which stages lack artifacts.
 
-- **Ramp mode** fires if stages 3, 4, 5, or 6 are missing. The loop cannot
-  sense its frontier yet and must build its instruments first.
-- **Main-loop ready** when stages 1–5 are present. Stages 6–9 become
-  ordinary `evaluator` / `observability` work inside the main loop.
+- **Ramp mode** fires if any of stages 1–5 are missing or have
+  demonstrably regressed. These are the minimum apparatus the loop needs
+  to sense its frontier; it must build its instruments first.
+- **Main-loop ready** when stages 1–5 are present. Stage 6 absence is not
+  ramp — a missing search set is ordinary `evaluator` debt handled inside
+  the main loop. Stages 6–9 become ordinary `evaluator` / `observability`
+  work once stages 1–5 hold.
+- **Mandatory ramp exit** — once stages 1–5 are closed, the loop must emit
+  `ramp-complete`; further ramp-shaped work is invalid unless a closed
+  stage is reopened by new typed evidence (a failing validator, a false
+  green, an unqueryable failure).
 - **Ramp encoded in motive** — if the user's prompt's first row/phase is
   ramp-shaped ("build a minimal fixture and prove the lifecycle
   end-to-end"), recognize this. Row 1 is ramp; rows 2+ are main-loop
@@ -193,6 +200,11 @@ Inline:
 - **Quiet-signal checkpoint:** after N green iterations with no new
   failing trace / finding, run the outer channel or emit
   `stop-and-summarize`. Default N=3; override via `{{QUIET_SIGNAL_N}}`.
+  The quiet counter resets only on *strong* new signal — an externally
+  reviewed finding, a typed failing trace, an oracle verdict, or a metric
+  movement. Self-authored ledger prose, renamed or re-split findings, and
+  speculative TODOs do not reset it; the loop cannot escape signal
+  starvation by narrating new work into existence.
 
 ### 6.5. Encode ramp if needed
 
