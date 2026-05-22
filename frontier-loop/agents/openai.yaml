@@ -1,0 +1,4 @@
+interface:
+  display_name: "Frontier Loop"
+  short_description: "Run evidence-driven overnight improvement loops."
+  default_prompt: "Use $frontier-loop to run an evidence-driven overnight improvement loop on this repo: improve the product when the oracle is trustworthy, and improve the evaluator when it is not."

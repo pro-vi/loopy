@@ -1,0 +1,4 @@
+interface:
+  display_name: "Story Loop"
+  short_description: "Build and reconcile frontend product storyboards."
+  default_prompt: "Use story-loop to extract frontend product stories from available guidance sources, make them human-reviewable, verify aligned stories with evidence, and reconcile the storyboard without fixing product bugs directly."
