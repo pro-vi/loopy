@@ -1,13 +1,14 @@
 ---
 name: greenfield-loop
-description: "Derive a repo-specific prompt for an autonomous /loop in green-field territory - artifact, metric, and target all undefined at start. Distinct from /frontier-loop. Also retrofits a drifted loop."
+description: "Derive a repo-specific prompt for a runner-agnostic autonomous loop in green-field territory - artifact, metric, and target all undefined at start. Distinct from /frontier-loop. Also retrofits a drifted loop."
 ---
 
 # Greenfield Loop
 
-This skill emits a repo-specific prompt for `/loop` (the persistent self-paced
-harness) when the loop begins in **green-field territory** — empty repo,
-vague creative intent, no pre-existing benchmark, no fixed evaluator.
+This skill emits a repo-specific **runner-agnostic** prompt — `/loop`,
+`/goal`, or an external harness can all run it — when the loop begins in
+**green-field territory**: empty repo, vague creative intent, no pre-existing
+benchmark, no fixed evaluator.
 
 **Distinct from `/frontier-loop`.** Both produce loop prompts that share many
 hard rules (vision-mandatory scoring, closure discipline, anti-idle, persistent
@@ -30,7 +31,8 @@ roughly-shaped-like-X but I'll know it when I see it"* — use this skill.
 
 **Invoke once per run** to author or revise the prompt. Output: the body of
 `loop/PROMPT.md` (or amendments to an existing one) + initial `loop/RUBRIC.md`
-+ initial `loop/STATE.md`. The loop runs the prompt; this skill writes it.
++ initial `loop/STATE.md`. The runner re-invokes the prompt; this skill
+writes it.
 
 ## When to invoke
 
@@ -43,7 +45,7 @@ Trigger on user phrases like:
 - "I want to discover what the right shape of this product is"
 
 Also invoke to **retrofit a drifting existing loop** that shows any of:
-- Hourly AWAIT polling on user-gated questions
+- Frequent pause-polling on user-gated questions (escalating where judgment should default)
 - Score milestones hit faster than expected, repeatedly
 - Self-scoring bare/cosmetic outputs at high numbers
 - 100+ untracked artifacts (no commit discipline)
@@ -63,10 +65,11 @@ Four files, all in `loop/` at the repo root:
 
 ### 1. `loop/PROMPT.md`
 
-The persistent prompt the user pastes into `/loop`. Carries the green-field
-invariants below. **The prompt is the load-bearing artifact** — every commit
-in this skill's lineage was driven by a failure mode that surfaced because
-the prompt missed an invariant.
+The persistent prompt the user pastes into the runner (`/loop`, `/goal`, or
+an external harness). Carries the green-field invariants below. **The
+prompt is the load-bearing artifact** — every commit in this skill's lineage
+was driven by a failure mode that surfaced because the prompt missed an
+invariant.
 
 ### 2. `loop/RUBRIC.md`
 
@@ -113,8 +116,8 @@ writing the total.
 In green-field, the user's "I want X-adjacent" is provisional. They will
 look at output and reframe — typically 2–4 times before the actual target
 locks in. Encode:
-- Schedule explicit **user-look gates** every ~50 iterations (not hourly
-  AWAITs — substantive review milestones)
+- Schedule explicit **user-look gates** every ~50 iterations (not frequent
+  pause-polling — substantive review milestones)
 - Treat any user reframe as a first-class iteration that may invalidate
   prior scores; write a `STATE.md` block that explicitly resets stale
   numbers when intent shifts
@@ -147,14 +150,22 @@ substrates, wire new modalities — when those advance the stone. This is not
 in the mode menu, with the discipline rule: **must advance the stone, not
 pad the toolbelt.** Each addition justified against a stone-axis.
 
-### 7. AWAIT is the most dangerous mode — restrict it severely
+### 7. Judgment default + bounded escalate
 
-Permissive AWAIT collapses into hourly polling on questions the loop
-should answer itself. Hard rule: AWAIT is for **paid APIs without budget
-caps, public-publish actions, and secret prompts** — *nothing else*.
-Topic, content, style, scene-direction, essay-text are all the loop's
-job. Add a saturation rule: 2 consecutive AWAITs on the same logical
-question force a default on the third.
+Pausing for human input is the polling-shaped failure mode. The default is
+**narrow reversible judgment + Alignment Review**: pick the smallest
+reversible action consistent with the strongest available source, record
+problem · options · chosen contract · alignment cost · rollback trigger ·
+review question, and continue. Topic, content, style, scene-direction,
+essay-text are all the loop's job — make the call, log it, move on. Human
+review happens after the fact.
+
+Emit `escalate: <reason>` only for genuinely irreversible / external
+blockers: **paid APIs without budget caps, public-publish actions, and
+secrets/credentials** — nothing else.
+
+Saturation rule: 2 consecutive escalates on the same logical question force
+a default judgment on the third.
 
 ### 8. Frontier-model consults are creative direction, not architecture review
 
@@ -182,7 +193,7 @@ identity decisions (which model? which account? which physical machine?) must
 on a binary completion flag (e.g. `preloop_complete: yes`) the human flips
 when the human-only checklist is done. Without this gate, the loop will:
 
-- Idle on hourly AWAIT polling for things only the user can do
+- Spin on escalates for things only the user can do, polling-shape instead of moving
 - Wrong-default decisions that should be the user's (which model? which tunnel?)
 - Mix human-decision velocity with autonomous-iteration velocity, distorting
   scoring and pacing
@@ -204,7 +215,7 @@ Loops produce hundreds of durable artifacts (renders, frame-grabs,
 transcripts, generated assets). The LEDGER and score files are durable
 text; everything else is at risk until committed. Hard rule: every
 iteration with file changes ends with `git add … && git commit` before
-scheduling next wake-up. Format: `chore(loop): iter NNN — <mode> —
+the iteration ends. Format: `chore(loop): iter NNN — <mode> —
 <focus>`. Use `COMMIT_APPROVED=1` env to bypass interactive hooks.
 
 ## Emit procedure
@@ -221,8 +232,10 @@ When invoked, perform these steps:
    and an "audience comprehension" axis. Concrete anchors per criterion.
 4. **Write `loop/PROMPT.md`** encoding all 11 invariants above plus a
    capability-list specific to the project's domain. The prompt should be
-   directly invokable as `/loop Read ./loop/PROMPT.md and follow its
-   instructions.`
+   directly invokable by any runner — e.g.
+   `/loop Read ./loop/PROMPT.md and follow its instructions.`,
+   `/goal Read ./loop/PROMPT.md ...`, or fed to an external harness. The
+   prompt is the same; the runner only differs in invocation.
 5. **Write `loop/STATE.md`** with phase=0 (bootstrap), iteration=0, and
    `Next action: build RUBRIC.md v0.1 with concrete anchors and
    per-criterion evidence rules; do not render a production artifact until
@@ -240,9 +253,9 @@ When invoked on a drifting loop:
 
 1. Read `loop/LEDGER.md` last 30 entries + current `loop/PROMPT.md` +
    `loop/RUBRIC.md` + `loop/STATE.md`.
-2. Score against the 10 invariants — which are encoded? Which are missing?
+2. Score against the 11 invariants — which are encoded? Which are missing?
    Which are encoded but the loop is violating them?
-3. Identify the dominant failure mode (rubric inflation? AWAIT polling?
+3. Identify the dominant failure mode (rubric inflation? escalate-polling?
    ceiling capture? capability stagnation?).
 4. Emit a *minimal* PROMPT.md mutation that closes the failure mode —
    not a full rewrite. The hand-evolved prompt has hard-won lessons; the
@@ -258,7 +271,7 @@ When invoked on a drifting loop:
 | Pick a numerical milestone and grind | Becomes a ceiling once hit | Milestone-shape (≥N criteria at 5, no <4) + imbalance-seeking |
 | Let the loop pick its own creative direction | Will copy reference channels | Schedule frontier-model creative consults every ~10 iters |
 | Trust loop self-scores | Inflation is the dominant early failure | Pixel/artifact citation mandatory for >2 |
-| Write AWAIT permissively | Hourly polling for hours | Narrow AWAIT triggers + saturation rule |
+| Write escalate permissively | Polling-shape for hours | Narrow escalate triggers + judgment-default + saturation rule |
 | Commit only when human notices the file pile | Durability lag, lost work risk | Per-iteration commit discipline |
 | Treat capability expansion as off-task | Green-field needs new tools | CAPABILITY mode at priority 0/1 |
 

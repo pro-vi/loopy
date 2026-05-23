@@ -1,13 +1,15 @@
 ---
 name: frontier-loop
-description: "Derive a repo-specific prompt for an evidence-driven overnight/persistent improvement loop consumed by an external harness (gnhf, cocc, ralph). Also diagnoses a drifting loop."
+description: "Derive a repo-specific prompt for an evidence-driven, runner-agnostic improvement loop (/loop, /goal, or an external harness like gnhf, cocc, ralph). Also diagnoses a drifting loop."
 ---
 
 # Frontier Loop
 
-This skill derives a repo-specific loop prompt for an external harness (gnhf,
-cocc, ralph). The harness runs the loop; this skill produces the prompt plus
-invariants that make the loop frontier-shaped rather than oracle-shaped.
+This skill derives a repo-specific loop prompt that is **runner-agnostic** —
+`/loop`, `/goal`, and external harnesses (gnhf, cocc, ralph) are all valid
+runners; they differ only in invocation. A runner re-invokes the loop; this
+skill produces the prompt plus invariants that make the loop frontier-shaped
+rather than oracle-shaped.
 
 Invoke **once per run** to author or revise the prompt. The loop's
 per-iteration playbook lives in [`references/frontier-prompt-template.md`](references/frontier-prompt-template.md)
@@ -156,6 +158,9 @@ Start from [`references/frontier-prompt-template.md`](references/frontier-prompt
 Inline:
 
 - **Motive**
+- **Runner contract** — sibling skills share an identical block; keep in sync.
+- **Judgment default** — narrow reversible judgment + Alignment Review;
+  sibling skills share an identical block; keep in sync.
 - **Core law** (the 4 valid-progress criteria)
 - **Signal hierarchy** — the four-tier ranking of memory surfaces from
   step 1. If step 2.7 recorded only weak surfaces available, say so

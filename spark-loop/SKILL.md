@@ -5,10 +5,10 @@ description: "Derive a repo-specific prompt for a fast, closure-shaped improveme
 
 # Spark Loop
 
-This skill produces a repo-specific prompt for an external harness running a
-fast closure-shaped model. The harness runs the loop; this skill derives the
-prompt and the closure discipline that keeps the loop narrow, evidence-backed,
-and honest.
+This skill produces a repo-specific prompt for a **runner-agnostic** fast
+closure-shaped loop — `/loop`, `/goal`, and external harnesses are all valid
+runners. A runner re-invokes the loop; this skill derives the prompt and the
+closure discipline that keeps the loop narrow, evidence-backed, and honest.
 
 The emitted prompt lives in
 [`references/spark-prompt-template.md`](references/spark-prompt-template.md).
@@ -160,6 +160,9 @@ Start from
 Fill in:
 
 - motive
+- runner contract (sibling skills share an identical block; keep in sync)
+- judgment default — narrow reversible judgment + Alignment Review;
+  sibling skills share an identical block; keep in sync
 - closure posture (`closure-ready` or `partial-closure`)
 - allowed bootstrap note if needed
 - cheap / narrow / outer channels
