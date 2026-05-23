@@ -4,8 +4,9 @@ Prompt generators for `/goal` and `/loop`.
 
 `loopy` is a small family of Claude Code skills that **derive repo-specific
 prompts for autonomous improvement loops**. The skills do not run the loop —
-they author the prompt (and the invariants) that an external harness or
-`/loop` then executes.
+they author the prompt (and the invariants) that a **runner** then executes.
+`/loop`, `/goal`, and external harnesses (gnhf, cocc, ralph) are all valid
+runners; the same emitted prompt runs under any of them.
 
 ## Design principle: loops that don't block
 
@@ -39,7 +40,7 @@ legitimate completion.
 |---|---|---|
 | `frontier-loop` | moves a repo's evidence-backed capability frontier | an artifact/evaluator exists and should get better |
 | `greenfield-loop` | discovers what to build when nothing is defined | empty repo, vague "build me something X-adjacent" intent |
-| `spark-loop` | seals one operator-facing seam per iteration | a known, closure-shaped seam with a cheap proof surface |
+| `spark-loop` | the **closing loop** — closes one known operator-visible problem per iteration with the smallest reversible fix + a narrow proof | you already know what to close (a bug, a review finding, a measured regression) |
 | `story-loop` | maintains a living product storyboard | discovering / verifying user-facing product promises |
 
 Rough routing: **target undefined →** `greenfield-loop` · **move an existing
@@ -61,7 +62,15 @@ done
 Each skill is a plain directory with a `SKILL.md` — no plugin runtime, so it
 works with any agent that reads skill folders.
 
+## Status
+
+`goal-loop` is the next planned member — the family currently has no
+finite, known-target, terminal loop (implement a known spec, pass a fixed
+suite, close a finite checklist). The README's tagline says "`/goal` and
+`/loop`"; `goal-loop` closes that family gap. Tracked in [`REVIEW.md`](REVIEW.md)
+under *Still deferred*.
+
 ## Notes
 
-See [`REVIEW.md`](REVIEW.md) for the most recent frontier-model design review
-of these skills and what changed because of it.
+See [`REVIEW.md`](REVIEW.md) for the frontier-model design review history
+and the deferred-decisions log.
