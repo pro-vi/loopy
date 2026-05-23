@@ -34,7 +34,51 @@ patches. No skill changed identity or structure.
 | story-loop | **Public hygiene:** "xBanker-specific" → "project-specific". |
 | story-loop | New Forbidden Move: the storyboard is not product intent — re-check an authority source before verifying/promoting an existing story. |
 
-## Deferred — needs your decision
+## Second pass — story-loop restructure + family alignment (2026-05-22)
+
+A targeted follow-up applied two structural calls from the deferred list,
+on top of the first-pass fixes above.
+
+### story-loop is now a prompt-generator
+
+Previously an operational workflow (the assistant ran steps 0–7 directly).
+Now mirrors frontier/spark:
+
+- `story-loop/SKILL.md` is a derivation procedure (inspect repo → pick
+  lane/surface → choose storyboard format → fill template → emit).
+- `story-loop/references/story-prompt-template.md` (new) holds the
+  per-iteration playbook — every section from the old Workflow §0–7,
+  Status Model, Core Objects, Forbidden Moves, and Minimal Output is
+  preserved verbatim.
+- Emits `loop/PROMPT.md` + `docs/storyboard.{md,yaml}` + `loop/STATE.md`.
+
+### All four skills are runner-agnostic + judgment-default
+
+The owner's framing: `/loop`, `/goal`, and external harnesses (gnhf,
+cocc, ralph) are the same thing minus a small invocation difference. The
+same prompt now runs under any of them. Two shared blocks (duplicated per
+skill to survive the per-skill symlink install model):
+
+- **Runner contract** — names the runner abstraction explicitly, declares
+  two logical signals (`stop-and-summarize` for halt, `escalate: <reason>`
+  for rare irreversible blockers), and disowns external ceilings as a
+  runner concern. Inserted into both `*-prompt-template.md` files and the
+  emitted story-loop prompt.
+- **Judgment default** — adopts story-loop's pattern family-wide: when
+  the iteration hits a taste-based or inferred call, prefer the narrow
+  reversible choice + log an Alignment Review (problem · options ·
+  chosen contract · alignment cost · rollback trigger · review question)
+  and continue. Escalate only for the genuinely irreversible.
+
+greenfield-loop's invariant 7 (AWAIT mode) was the most polling-shaped
+piece — rewritten as "Judgment default + bounded escalate", preserving
+the narrow trigger list (paid APIs without budget caps, public-publish,
+secrets) and the 2-consecutive-same-question saturation rule.
+
+frontier-loop and spark-loop's framing was lightly decoupled from
+specific runners; their templates were already runner-neutral.
+
+### Still deferred — needs your decision
 
 These are real and well-argued, but they change structure or identity. Not
 applied autonomously.
