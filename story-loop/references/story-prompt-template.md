@@ -250,6 +250,26 @@ Prefer a small delta over a full-board rewrite. Do not create large
 backlogs from weak inference. When many candidates appear, add only the
 most source-backed candidates and summarize the rest as reviewer questions.
 
+**Current-surface promise scan** (when the storyboard is sparse or
+stale, or no new source-backed candidate has appeared in the last few
+iterations). Run a narrow scan of visible commitments on the selected
+surface:
+
+- page titles and section headings
+- primary and secondary CTAs
+- empty / loading / error / disabled / success / recovery copy
+- table / card / list labels and status chips
+- navigation labels and destination promises
+- confirmation, warning, destructive, or irreversible-action language
+
+Classify each hit as `observed_ui` or `public_claim` — these are
+**not** authoritative intent by themselves. Promote at most one
+observed promise to `candidate` per iteration. To make it `ready`,
+require either corroborating current docs / issue / PR / test / human
+guidance, or a recorded Alignment Review. Also record at least one
+rejected or weak observed promise per scan, so the reviewer can see
+what was intentionally not promoted.
+
 ### 3. Align and record judgment
 
 Apply the Judgment default (above). Story-loop-specific Alignment Review
@@ -324,6 +344,20 @@ intent → `candidate` + reviewer question; source conflict → `disputed`;
 no fixture → `fixture-gap`; no runnable app → `env-gap`; story too broad
 → `split-needed`). The output is a storyboard update + handoff or
 reviewer question — never `verified` or `product-fail`.
+
+**Frontier novelty.** A `verified` story is ineligible for re-selection
+unless a trigger is recorded: an attached source changed · the route /
+component / fixture / workflow changed · prior evidence was invalidated
+· a human explicitly requested regression · the story blocks a newer
+candidate · the story is part of a named release or migration surface.
+Among eligible stories, prefer frontier expansion over proof convenience:
+new explicit source not yet on the board → current public/product claim
+without acceptance criteria → `disputed` / `stale` needing re-grounding
+→ candidate with clear user value but missing proof recipe → `ready` with
+no prior evidence → regression of a previously `verified` story only with
+a recorded trigger. After 2 consecutive iterations that add no new
+source, no new candidate, and no new alignment decision, force a
+re-grounding pass before further verification.
 
 ### 5. Verify with evidence
 
