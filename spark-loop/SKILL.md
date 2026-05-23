@@ -5,10 +5,15 @@ description: "Derive a repo-specific prompt for a fast, closure-shaped improveme
 
 # Spark Loop
 
-This skill produces a repo-specific prompt for a **runner-agnostic** fast
-closure-shaped loop — `/loop`, `/goal`, and external harnesses are all valid
-runners. A runner re-invokes the loop; this skill derives the prompt and the
-closure discipline that keeps the loop narrow, evidence-backed, and honest.
+The **closing loop**: pick one known operator-visible problem, make the
+smallest reversible fix, prove it with a narrow command, halt. Use
+`spark-loop` when you already know what to close; use `frontier-loop`
+when you don't.
+
+This skill derives the prompt — it does not run the loop. The emitted
+prompt is runner-agnostic: `/loop`, `/goal`, and external harnesses (gnhf,
+cocc, ralph) are all valid runners; a runner re-invokes the loop. The
+discipline below keeps each iteration narrow, evidence-backed, and honest.
 
 The emitted prompt lives in
 [`references/spark-prompt-template.md`](references/spark-prompt-template.md).
