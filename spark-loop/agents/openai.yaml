@@ -1,4 +1,0 @@
-interface:
-  display_name: "Spark Loop"
-  short_description: "Run seam-closing fast-model loops."
-  default_prompt: "Use $spark-loop to derive a repo-specific Spark closure loop for this codebase: one live seam per iteration, one live anchor, explicit proof, and strong anti-churn guardrails."
