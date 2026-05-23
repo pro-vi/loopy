@@ -38,15 +38,20 @@ legitimate completion.
 
 | Skill | Derives a loop that… | Use when |
 |---|---|---|
-| `goal-loop` | the **terminal loop** — closes a finite acceptance inventory and halts when one final-verify proves the whole list | you have a known list of things to make true (spec, suite to pass, `/architect` blueprint) |
+| `goal-loop` | the **terminal loop** — closes a finite acceptance inventory and halts when one final-verify proves the whole list (a 1-row inventory is fine for closing a single bug or review finding) | you have a known list of things to make true (spec, suite to pass, `/architect`-style blueprint, one bug with a repro) |
 | `frontier-loop` | moves a repo's evidence-backed capability frontier | an artifact/evaluator exists and should get better |
 | `greenfield-loop` | discovers what to build when nothing is defined | empty repo, vague "build me something X-adjacent" intent |
-| `spark-loop` | the **closing loop** — closes one known operator-visible problem per iteration with the smallest reversible fix + a narrow proof | you already know the one thing to close (a bug, a review finding, a measured regression) |
 | `story-loop` | maintains a living product storyboard | discovering / verifying user-facing product promises |
 
 Rough routing: **finite known target →** `goal-loop` · **target undefined →**
 `greenfield-loop` · **move an existing frontier →** `frontier-loop` ·
-**close one known seam →** `spark-loop` · **product promises →** `story-loop`.
+**product promises →** `story-loop`.
+
+### Meta (experimental)
+
+| Skill | What it does | Status |
+|---|---|---|
+| `god-loop` | composes the four siblings — each iteration classifies which mode is most disturbed and runs that mode's playbook (homeostasis over modes, vs `frontier-loop`'s homeostasis over axes within a mode) | **v0, not yet dogfooded.** Use only when a run genuinely shifts between modes; most projects want a single sibling. |
 
 ## Install
 
@@ -54,7 +59,8 @@ Clone, then symlink the skills into your agent's skills directory:
 
 ```sh
 git clone git@github.com:pro-vi/loopy.git
-for s in frontier-loop goal-loop greenfield-loop spark-loop story-loop; do
+for s in frontier-loop goal-loop greenfield-loop story-loop; do
+  # ^ stable siblings only; skip `god-loop` until you genuinely use it.
   ln -s "$PWD/loopy/$s" ~/.claude/skills/$s      # Claude Code
   ln -s "$PWD/loopy/$s" ~/.codex/skills/$s       # Codex (optional)
 done

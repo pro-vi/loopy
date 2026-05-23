@@ -184,6 +184,100 @@ choice becomes `authority`. The only new work goal-loop does on top of
 `/architect` output is wire the `verifier` commands and define the
 `final-verify`.
 
+## Sixth pass — spark-loop retired from the public family (2026-05-23)
+
+`spark-loop` is removed from the repo. The whole family is now four
+prompt-generator skills: `frontier-loop` · `goal-loop` · `greenfield-loop` ·
+`story-loop`. `spark-loop`'s content lives in git history (commits up to
+`68c6ed8`); restoration is a `git revert`/`git checkout` away if real
+usage later argues for it.
+
+**Trigger.** Owner flagged spark-loop as an experiment with unclear
+identity. Second-opinion consultation (ChatGPT Pro Extended Thinking,
+fire-and-forget via Agentify; PAL trio was unavailable) returned a
+"demote, don't delete" verdict at confidence 0.74. Owner went one
+step further: remove entirely.
+
+**Verdict-summary** (paraphrased from the consultation):
+
+- `goal-loop` subsumes the *clean* terminal case but not Spark's
+  *opportunistic* "close next live seam" posture. The difference is
+  real but the overlap is large enough that public users won't
+  understand why both exist.
+- The 8-family seam taxonomy contained earned design language but parts
+  read as internal vocabulary, not user-facing routing.
+- The naming concern was a polite signal of a deeper placement issue.
+  The other 4 skills produce immediate routing reflex; spark required
+  the reader to learn "seam closure" before they could decide. That's
+  the real disqualification.
+- Public top-level skills need immediate routing clarity. Spark hadn't
+  earned that.
+
+**Promotion criteria** (if future dogfooding argues for restoration).
+The wisdom from spark-loop's closure discipline lives on in goal-loop's
+verifier discipline + the oracle principles. A future `closing-loop` or
+`spark-loop` deserves a sibling slot back only if real runs show it is
+clearly better than a 1-row `goal-loop` for at least two of:
+
+- review-feedback closure,
+- operator-bug-with-repro,
+- known-false-green hardening,
+- latency / failure-legibility seam,
+- repeated-workaround compression.
+
+If none of those win, the sibling slot was the wrong shape and the
+content lives correctly inside `goal-loop`.
+
+**Sibling reroutes updated:**
+
+- `goal-loop` core framing rebuilt to stand alone (no longer "spark-loop
+  generalized" — it's "closure-shaped + terminal + multi-criterion", with
+  an explicit note that a 1-row inventory is fine).
+- `frontier-loop`, `greenfield-loop`, `story-loop`, `goal-loop`
+  halt-cause `wrong-loop` reroutes drop spark as a target and point at
+  `goal-loop` for finite-checklist closure work.
+- `story-loop`'s `product-fail` handoff (was: `spark-loop` or `build`)
+  now points at `goal-loop` with a 1-row inventory.
+- README routing line drops the `close one known seam` row.
+
+## Seventh pass — god-loop drafted as experimental meta-skill (2026-05-23)
+
+`god-loop/` exists as a v0 / experimental draft — a meta-skill that
+composes the four siblings by homeostating over modes. Where
+`frontier-loop` cycles through five axes within its mode, `god-loop`
+cycles through the four modes themselves. Each iteration: classify
+which mode is most disturbed, delegate to that mode's playbook,
+reclassify next iteration.
+
+**Status:** not yet dogfooded. Marked clearly in SKILL.md frontmatter, in
+the README's "Meta (experimental)" subsection (separate from the 4
+stable siblings), and in the README install loop (skip until used).
+
+**Design choices for v0:**
+
+- `god-loop` reads sibling templates at derivation time and **inlines**
+  active-mode playbooks into the emitted prompt; the runtime prompt is
+  self-contained, no live cross-skill resolution at iteration time.
+- The classifier refuses to emit a god-prompt if only one mode classifies
+  as active — single-mode runs should use the sibling skill directly,
+  not god-loop with ceremony.
+- A `wrong-shape` halt-cause fires at iteration time if only one mode has
+  shown disturbance across the run; the loop reroutes to that sibling.
+- Anti-thrash threshold: `{{MAX_MODE_THRASH}}` switches per N iterations
+  without measurable progress in any mode → halt for human review.
+
+**Concerns to watch in dogfooding:**
+
+- Mode-thrashing under unclear disturbance signs.
+- Inlined-playbook drift when a sibling skill updates mid-run (mitigation:
+  fingerprint inlined source versions).
+- The active-modes audit becoming taste rather than evidence — if every
+  god-loop derivation lights up all four modes, the audit isn't doing
+  its job.
+
+If real runs argue against it, the natural fallback is removing
+god-loop and routing manually between siblings.
+
 ## Still deferred
 
 Family-structural calls still need human judgment:
@@ -192,11 +286,9 @@ Family-structural calls still need human judgment:
   A truly shared file dangles under per-skill symlink install; this pass
   resolved to per-skill duplication of the short Runner-contract /
   Judgment-default blocks. A router would need either heavy per-skill
-  duplication or an installer that brings the family together.
-- **Rename `spark-loop`.** The word "spark" doesn't telegraph
-  "closing-shaped"; the intro was tightened in plain language but the
-  name itself remains. Renaming is a public-API change; deferred as its
-  own decision.
+  duplication or an installer that brings the family together. god-loop
+  partially relieves this (it's a runtime router) but doesn't replace
+  the case for a documentation-level router.
 
 The full review text for each skill is preserved in the ChatGPT Pro
 threads.
