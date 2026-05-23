@@ -99,6 +99,15 @@ Valid progress is any small reversible change that does at least one of:
 4. sharpens coverage around a known false-green zone
 5. compresses a repeated manual workaround into a canonical path
 
+## Closure discipline (FIXED ≠ CLOSED)
+
+A Spark iteration may mark its **own** diff `FIXED_PENDING_CONFIRMATION`.
+It may not mark externally-sourced findings `CLOSED` unless an independent
+pass confirms the seam is not re-raised — the next iteration's review, an
+external oracle, or a separate reviewer. Halt conditions count `OPEN`
+only; `FIXED_PENDING_CONFIRMATION` is not cleared by the same iteration
+that authored it.
+
 ## Live anchor requirement
 
 Every accepted change must cite exactly one primary live anchor:
@@ -142,7 +151,10 @@ If the seam family is unclear, keep reading or halt.
 turn a relied-on but implicit rule into a minimal executable contract.
 
 `probe-and-preserve`:
-instrument narrowly to localize cause; keep only probes that improve future diagnosis.
+instrument narrowly to localize cause for **one named anchor**; before
+adding a probe, state when it will be removed and what durable diagnostic
+value would justify keeping it. Not permission to add broad observability,
+debug multiple subsystems, or discover the repo's architecture.
 
 `latency-archaeology`:
 remove measured avoidable work from a real operator path.
@@ -157,7 +169,12 @@ make failures answer what happened, to whom, why, and what to do next.
 create or improve a selector that can distinguish correct from incorrect behavior.
 
 `claim-falsification`:
-attack a proud claim until it either breaks or earns a durable proof.
+attack **one explicit existing claim** (in repo, docs, tests, release
+notes, or review feedback) using **one bounded falsifier**. Not
+permission to search for claims, invent claims, or broaden the falsifier
+into a general evaluator. If either this family or `probe-and-preserve`
+requires broad discovery, the work is frontier-shaped — emit
+`stop-and-reroute: frontier-loop`.
 
 `workflow-capsule`:
 package a recurring workflow into the smallest stable operator-facing affordance.
@@ -214,6 +231,24 @@ A probe may survive only if it improves future diagnosis at low noise cost.
 11. Mark authored fixes as pending confirmation, not closed.
 12. If no live seam remains, emit `stop-and-summarize` and halt.
 
+## Frontier tripwires
+
+Stop and emit `stop-and-reroute: frontier-loop` (with the anchor and the
+missing frontier capability) when the selected seam requires any of:
+
+- discovering the correct product behavior
+- deciding between multiple plausible architectures
+- building or redesigning the evaluator
+- exploring several subsystems to find a target
+- changing public semantics without an existing contract anchor
+- broad observability work not tied to one named anchor
+- multi-step migration, schema redesign, or cross-cutting refactor
+- turning a local proof gap into a general testing framework
+- manufacturing a live anchor by broad exploration
+
+Spark may inspect broadly enough to understand the named anchor; it may
+not search broadly to choose what the repository should become.
+
 ## Fake-progress detectors
 
 Assume progress is fake if any of these appear:
@@ -246,7 +281,19 @@ Freshness-only bookkeeping, naming cleanup, broad polish, and wrapper churn do n
 
 ## Quiet-signal checkpoint
 
-After {{QUIET_SIGNAL_N}} consecutive green accepted iterations with no new failing trace, run the outer channel or emit `stop-and-summarize`.
+After `{{QUIET_SIGNAL_N}}` consecutive green accepted iterations with no
+new failing trace, run the outer channel or emit `stop-and-summarize`.
+
+### Wrong-loop checkpoint
+
+At the same cadence (or sooner if a pattern emerges), reassess: are
+accepted closures from the original-priority anchor inventory, or just
+easy incidental seams? Is the same top operator problem still blocked by
+missing evaluator, missing contract, or architectural uncertainty? Are
+new seams arriving from operator evidence — or being manufactured by
+exploration? If the remaining highest-impact work is not closure-shaped,
+emit `stop-and-reroute: frontier-loop`. Do not keep harvesting trivial
+seams to avoid frontier work.
 
 The short version:
 
