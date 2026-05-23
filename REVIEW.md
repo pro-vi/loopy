@@ -78,45 +78,50 @@ secrets) and the 2-consecutive-same-question saturation rule.
 frontier-loop and spark-loop's framing was lightly decoupled from
 specific runners; their templates were already runner-neutral.
 
-### Still deferred — needs your decision
+## Third pass — 19 hand-tunes (2026-05-22)
 
-These are real and well-argued, but they change structure or identity. Not
-applied autonomously.
+The deferred per-skill enhancements were triaged and applied (cash-out
+softened to parameterized `{{CASH_OUT_N}}`, default 3; story-loop's
+nested-YAML forms slimmed into terse single-level contracts matching the
+family's voice).
 
-### Family structure (from the cohesive review)
+**frontier-loop** — stage closure cards · repo-specific frontier vector ·
+anchor lifecycle (stale-anchor depletion) · cash-out discipline (softened).
 
-- **Missing `goal-loop` / oracle-loop.** The repo's identity is "generators
+**greenfield-loop** — score-locked ramp state machine · role-protected
+phase gates (loop / user / external ownership) · `INTENT.md` competing
+target hypotheses · blind audience-comprehension tests · rubric versioning
++ score quarantine · blind adversarial consult protocol · consult
+availability detection at derivation time (front-loads the limitation when
+no consult channel is present).
+
+**spark-loop** — in-prompt frontier tripwires · wrong-loop checkpoint ·
+FIXED ≠ CLOSED closure discipline · constrained
+`claim-falsification` / `probe-and-preserve` seam families · intro
+tightened with plain language (no "seam closure" jargon at the top).
+
+**story-loop** — explicit Bootstrap Mode · Ready Gate (intent-ready +
+proof-ready split) · non-QA "no ready story" fallback · frontier novelty
+rule · current-surface promise scan.
+
+## Still deferred
+
+Family-structural calls still need human judgment:
+
+- **Missing `goal-loop` / oracle-loop.** The repo identity is "generators
   for `/goal` and `/loop`", and frontier-loop explicitly contrasts itself
-  with an "Oracle loop" — but no skill owns finite, known-target, terminal
-  work (implement a known spec, pass a fixed suite, close a finite
-  checklist). This is the biggest gap. Either author `goal-loop`, or have the
-  router declare finite oracle work out-of-family.
-- **story-loop is not shaped like the others.** frontier/greenfield/spark are
-  prompt-generators; story-loop reads as an operational workflow. Either
-  normalize it into a generator (emit `loop/PROMPT.md` etc.) or split it out.
-  *(You already flagged this as "later".)*
-- **`references/loop-family-router.md`** — one authoritative routing decision
-  tree; each skill defers to it instead of re-deriving "when to use".
-- **`references/shared-loop-contract.md`** — factor shared vocabulary
-  (memory-surface hierarchy, reward/proof channels, closure statuses,
-  quiet-signal) into one cited file so the four skills stop drifting.
-- Explicit deflection rules: frontier↔greenfield (don't let frontier absorb
-  empty/vague repos), frontier↔spark (closure mode vs spark-loop).
+  with an "Oracle loop" — but no skill owns finite, known-target,
+  terminal work (implement a known spec, pass a fixed suite, close a
+  finite checklist). The biggest remaining gap.
+- **Shared `references/loop-family-router.md` + `shared-loop-contract.md`.**
+  A truly shared file dangles under per-skill symlink install; this pass
+  resolved to per-skill duplication of the short Runner-contract /
+  Judgment-default blocks. A router would need either heavy per-skill
+  duplication or an installer that brings the family together.
+- **Rename `spark-loop`.** The word "spark" doesn't telegraph
+  "closing-shaped"; the intro was tightened in plain language but the
+  name itself remains. Renaming is a public-API change; deferred as its
+  own decision.
 
-### Larger per-skill enhancements (drop-in text exists in the reviews)
-
-- **frontier-loop:** stage-closure "evidence cards"; a repo-specific
-  "frontier vector"; anchor lifecycle (stale-anchor depletion); evaluator
-  cash-out discipline.
-- **greenfield-loop:** score-locked ramp state machine; role-protected phase
-  gates (loop/user/external ownership); `INTENT.md` competing target
-  hypotheses; blind audience-comprehension tests; rubric versioning + score
-  quarantine; blind adversarial consult protocol.
-- **spark-loop:** in-prompt frontier tripwires; a "wrong-loop checkpoint";
-  carry `FIXED ≠ CLOSED` from frontier-loop; constrain the
-  `claim-falsification` / `probe-and-preserve` seam families.
-- **story-loop:** explicit Bootstrap Mode; split `ready` into intent-ready
-  vs proof-ready; a non-QA "no ready story" fallback; a frontier-novelty
-  rule (don't re-verify easy stories); negative-space promise scan.
-
-The full review text for each skill is preserved in the ChatGPT Pro threads.
+The full review text for each skill is preserved in the ChatGPT Pro
+threads.
