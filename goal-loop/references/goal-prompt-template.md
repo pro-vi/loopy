@@ -306,9 +306,6 @@ When emitting `criteria-met`, `stop-and-summarize`, or
   - `frontier-loop` if a criterion needs open-ended search, evaluator
     discovery, metric improvement, or "make it better" without a fixed
     pass line;
-  - `spark-loop` if the remaining work is one operator-visible seam with
-    a narrow proof channel and no meaningful cross-criterion terminal
-    matrix;
   - `greenfield-loop` if the artifact / target / audience / evaluator is
     under-specified and the criteria are placeholders rather than a
     contract;

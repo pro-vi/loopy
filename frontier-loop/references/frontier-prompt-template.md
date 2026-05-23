@@ -306,8 +306,8 @@ cause so the user (and the next derivation) can route it back:
   axes in balance, no positive-yield intervention available.
 - `signal-starvation` — quiet-signal checkpoint fired; outer channel
   ran or stop-and-summarize.
-- `wrong-loop` — the seam belongs in a different loop type (a
-  closure-shaped seam should reroute to `spark-loop`).
+- `wrong-loop` — the work belongs in a different loop type (a
+  finite-checklist closure should reroute to `goal-loop`).
 
 `derivation-gap` is the feedback signal. It tells the user the
 checklist was incomplete; add the missed item to next run's Frontload

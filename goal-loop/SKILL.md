@@ -5,12 +5,12 @@ description: "Derive a repo-specific prompt for a terminal / oracle-shaped loop:
 
 # Goal Loop
 
-A **terminal closing loop**. Where `spark-loop` closes one operator-visible
-seam, `goal-loop` closes a *finite list* — every acceptance criterion has a
-verifier, and the run is done only when one **final-verify** proves the
-whole inventory in the same repo state.
+A **terminal closing loop**. `goal-loop` closes a *finite list* of
+acceptance criteria — every criterion has a verifier, and the run is done
+only when one **final-verify** proves the whole inventory in the same
+repo state.
 
-`goal-loop` is the family's missing finite-target sibling. Use it when
+Use it when
 "done" means a known list of things must be true, simultaneously, with
 machine-checkable proof. The per-iteration playbook lives in
 [`references/goal-prompt-template.md`](references/goal-prompt-template.md);
@@ -27,22 +27,30 @@ bash, no taxonomy.**
 
 ## Core framing
 
-A goal loop is **`spark-loop` generalized to a finite list**:
+A goal loop is **closure-shaped + terminal + multi-criterion**:
 
-| `spark-loop` | `goal-loop` |
-|---|---|
-| one admissible live anchor | finite list of admissible criteria |
-| one narrow discriminative proof channel | one verifier per criterion |
-| FIXED ≠ CLOSED | per-criterion pass ≠ criteria-met until **final-verify** |
-| halt when no live seam remains | halt when **all** criteria pass in one final-verify |
+- A finite list of admissible criteria, each with a stable ID.
+- One discriminative verifier per criterion (binary, independent — see
+  [`references/oracle-principles.md`](references/oracle-principles.md)).
+- A two-step proof: a per-criterion verifier pass marks
+  `PASS_PENDING_FINAL`; only the **final-verify** (one command that proves
+  the whole inventory in the same repo state) moves it to `PASS`.
+- Halt when all criteria reach `PASS` → emit `criteria-met` →
+  `stop-and-summarize`. Partial completion is `partial-deadlock`, never
+  `criteria-met`.
 
-Inherit spark's closure discipline. Add three terminal-only concepts:
+Three concepts make goal-loop terminal where the other loops stay
+open-ended:
 
 1. **Acceptance inventory** — the frozen criteria list with stable IDs.
 2. **Final-verify** — one command that proves every criterion in the same
    repo state, after each per-criterion verifier has passed individually.
 3. **Oracle-drift guard** — criteria are frozen; the loop must not weaken
    them to make itself pass.
+
+A single-criterion run is fine and lightweight — a finite inventory of one
+covers the "I found one bug, close it" case without needing a separate
+loop type.
 
 Valid progress: any small reversible change that does at least one of:
 
@@ -76,7 +84,6 @@ as pass/fail evidence, the decisive choice becomes the authority.
 
 - The target is a quality frontier ("better", "more robust", "higher
   score") with no terminal pass line → `frontier-loop`.
-- One operator-visible seam covers the job → `spark-loop`.
 - The job is product-promise discovery / verification before a finite
   target exists → `story-loop`.
 - Target / artifact / evaluator is undefined → `greenfield-loop`.

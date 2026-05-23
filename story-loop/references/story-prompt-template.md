@@ -564,8 +564,8 @@ cause so the user (and the next derivation) can route it back:
   frontier-novelty rule forced a re-grounding pass that yielded
   nothing.
 - `wrong-loop` — the work needs a different loop (evaluator blindness
-  → `frontier-loop`; known product-fail with narrow proof →
-  `spark-loop`; target itself undefined → `greenfield-loop`).
+  → `frontier-loop`; known product-fail with a finite acceptance
+  inventory → `goal-loop`; target itself undefined → `greenfield-loop`).
 
 `derivation-gap` is the feedback signal: the Frontload audit was
 incomplete; close it next run.

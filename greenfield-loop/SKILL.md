@@ -55,7 +55,7 @@ Also invoke to **retrofit a drifting existing loop** that shows any of:
 ## Do NOT invoke when
 
 - Project has an explicit benchmark, oracle, CI signal, or pre-built evaluator → use `/frontier-loop`
-- Single-issue closure work on existing code → use `/spark-loop`
+- Known finite acceptance criteria (spec, suite to pass, checklist) → use `/goal-loop`
 - One-off planning (not iterative) → use a dedicated planning skill, not a loop
 - Pure debugging → use a dedicated debugging tool, not a loop
 
@@ -342,8 +342,8 @@ The emitted PROMPT.md must include this classifier. When the loop emits
   (no rubric revision, no consult finding, no user reframe) for the
   configured stretch.
 - `wrong-loop` — the work has stopped being green-field (target now
-  fixed and the loop should switch to `frontier-loop`, or the work is
-  one known seam better fit for `spark-loop`).
+  fixed and the loop should switch to `frontier-loop`, or the work is a
+  known finite checklist better fit for `goal-loop`).
 
 `derivation-gap` is the feedback signal: it tells the user the
 Frontload checklist was incomplete; close it next run.
