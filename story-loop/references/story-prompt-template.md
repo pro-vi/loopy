@@ -144,8 +144,15 @@ Use precise statuses:
 
 - `candidate` - extracted or inferred, not yet acceptance-shaped.
 - `aligned` - human or strong source confirms the promise is real.
-- `ready` - aligned or alignment-reviewed, with acceptance criteria,
-  fixture, and proof plan.
+- `ready` - both gates pass:
+  - **intent-ready**: authoritative source (human, current docs,
+    accepted issue/PR, public claim) or a recorded Alignment Review.
+  - **proof-ready**: a known route/surface, a fixture (or recorded
+    fixture-gap), an evidence method, a passing preflight, and a failure
+    classifier that distinguishes product-fail / oracle-defect /
+    fixture-gap / env-gap.
+  If intent-ready but not proof-ready → `fixture-gap` / `env-gap`. If
+  proof-ready but not intent-ready → stay `candidate` / `disputed`.
 - `verifying` - currently under evidence capture.
 - `verified` - passed with linked evidence.
 - `product-fail` - app behavior contradicts an aligned or
@@ -177,6 +184,33 @@ the user changes lanes or the finding directly supports the selected story.
 
 Update only this storyboard. If a row uses a different format than the
 file convention, normalize before writing.
+
+## Bootstrap mode
+
+Enter Bootstrap mode when any of these hold: no storyboard exists yet;
+no lane/surface has been recorded; no story has both an authoritative
+source and an executable proof plan; the app route / fixture / seed /
+auth / evidence-capture path is unknown.
+
+Bootstrap is **not verification**. Do not mark stories `ready`,
+`verifying`, `verified`, or `product-fail` during bootstrap.
+
+Output a small ramp packet (terse, prose or single-level list — no
+nested forms):
+
+- selected lane, selected surface class
+- storyboard path (created or existing)
+- sources scanned (kind + locator + truth_kind + freshness, one line each)
+- proof-surface inventory (runnable? app URL? routes? fixtures? auth?
+  evidence-capture path? blockers?)
+- seeded candidates (just IDs)
+- exit criteria — a single sentence per: lane named, one promise with
+  authoritative source, AC distinguishes failure classes, fixture or
+  fixture-gap recorded, proof recipe runnable or env-gap recorded
+
+Exit Bootstrap only when at least one story can become `ready` under
+the Ready Gate. If the proof surface is still missing, emit
+`fixture-gap` / `env-gap` instead of attempting verification.
 
 ## Iteration protocol
 
@@ -279,6 +313,17 @@ Skip stories whose proof surface is missing; mark `fixture-gap`,
 `env-gap`, or `oracle-defect` and create the appropriate handoff. If no
 ready story exists, continue discovery and alignment-prep by default
 instead of treating the loop as complete.
+
+**No-ready-story fallback (not QA).** When no `ready` story exists, do
+**not** begin exploratory QA and do not opportunistically verify observed
+behavior. Perform one bounded frontier-prep action: pick the lane / surface
+class if absent → scan the strongest current sources for that surface →
+seed or update at most 3 `candidate` stories → write acceptance criteria
+for at most 1 → record the missing gate that blocks readiness (missing
+intent → `candidate` + reviewer question; source conflict → `disputed`;
+no fixture → `fixture-gap`; no runnable app → `env-gap`; story too broad
+→ `split-needed`). The output is a storyboard update + handoff or
+reviewer question — never `verified` or `product-fail`.
 
 ### 5. Verify with evidence
 
