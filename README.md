@@ -31,8 +31,36 @@ four skills share one principle to prevent that:
 Each emitted prompt also carries a **halt-cause classifier** so the user
 can route a halt back: `derivation-gap` means "you should have asked me
 this", `genuine-escalate` means "I correctly punted", `frontier-exhausted`
-/ `stone-converged` / `seams-sealed` / `storyboard-converged` mean
-legitimate completion.
+/ `stone-converged` / `seams-sealed` / `storyboard-converged` /
+`criteria-met` mean legitimate completion.
+
+## Promotion discipline
+
+A new sibling skill, overlay, or structural refactor lands on `main`
+only with a **dogfooding citation** — a concrete run on a real project
+that surfaced the failure mode the addition addresses. Frontier-model
+recommendations and design intuitions log as *candidates* in
+[`REVIEW.md`](REVIEW.md); drafts wait for a real run before promoting.
+
+The capture mechanism is the **Skill Harvest** pattern that each sibling
+template emits as part of its iteration / reconcile protocol: when a run
+reveals a generalizable lesson, the loop writes a structured harvest
+note (target skill · observed gap · evidence iteration · proposed rule ·
+why it generalizes · suggested patch wording · accidental-encouragement
+risk). Promotion to `main` requires at least one such citation.
+
+This bar already produced:
+- `spark-loop` retirement (the heavy taxonomy hadn't earned a public
+  sibling slot)
+- `god-loop` retraction (drafted, then pulled when it failed the same
+  bar)
+- a candidate list (currently `inquiry-loop` · `audit-loop` · `god-loop`
+  · authority-resolution overlay · migration-as-goal-overlay), each
+  documented in `REVIEW.md` with the run signal that would earn promotion.
+
+The bar is empirical, not aesthetic. *"Full coverage"* is rejected as a
+design goal — the family grows from observed failure modes, not from
+theoretical gaps.
 
 ## The skills
 

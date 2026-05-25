@@ -117,6 +117,8 @@ acceptance:
   - "The cited evidence span is preserved through navigation."
 fixtures:
   - pack_legal_live_upload
+story_family: visible-mechanical
+fixture_mode: requires-real-auth
 verification_recipe:
   app_url: "http://localhost:5203"
   probe: "browser interaction + DOM state + screenshots"
@@ -147,9 +149,10 @@ Use precise statuses:
 - `ready` - both gates pass:
   - **intent-ready**: authoritative source (human, current docs,
     accepted issue/PR, public claim) or a recorded Alignment Review.
-  - **proof-ready**: a known route/surface, a fixture (or recorded
-    fixture-gap), an evidence method, a passing preflight, and a failure
-    classifier that distinguishes product-fail / oracle-defect /
+  - **proof-ready**: a known route/surface, a declared fixture mode, a
+    fixture (or recorded fixture-gap), an evidence method, a manifest
+    path or repo-local evidence location, a passing preflight, and a
+    failure classifier that distinguishes product-fail / oracle-defect /
     fixture-gap / env-gap.
   If intent-ready but not proof-ready → `fixture-gap` / `env-gap`. If
   proof-ready but not intent-ready → stay `candidate` / `disputed`.
@@ -184,6 +187,49 @@ the user changes lanes or the finding directly supports the selected story.
 
 Update only this storyboard. If a row uses a different format than the
 file convention, normalize before writing.
+
+## Mechanical run contract
+
+Durable progress lives in artifacts, not memory. Keep `loop/STATE.md`
+current enough that another runner can resume without guessing. Track:
+
+- `phase`, `iteration`, `current_story`, `last_action`, `next_action`
+- `last_surface`, `last_story_family`, `same_family_count`
+- `fixture_mode`: `bypass-compatible | requires-real-auth | admin-operator | unknown`
+- `evidence_manifest`: path to the current or latest promoted story manifest
+- `last_validation_commands`: exact focused commands run
+- `remaining_findings_classified`: counts or short notes for skipped findings
+- `halt_cause` and `halt_re-grounding` before `stop-and-summarize`
+
+Every promoted story writes a small manifest in the repo's evidence
+location when available. Prefer JSON so it can be parsed with `jq empty`;
+otherwise include the same fields in the storyboard or ledger:
+
+```json
+{
+  "storyId": "<id>",
+  "surface": "<route or component/workflow>",
+  "storyFamily": "visible-mechanical | recovery-copy | semantic-only | operator-only | other",
+  "fixtureMode": "bypass-compatible | requires-real-auth | admin-operator | unknown",
+  "beforeArtifacts": [],
+  "afterArtifacts": [],
+  "validationCommands": [],
+  "classification": "verified | product-fail | oracle-defect | fixture-gap | env-gap",
+  "commit": {
+    "hash": null,
+    "subject": null
+  },
+  "remainingFindings": [],
+  "haltEligibility": {
+    "checked": false,
+    "reason": null
+  }
+}
+```
+
+If the manifest is missing or unparseable, repair it before promotion or
+classify the result as `oracle-defect` / `env-gap` instead of pretending
+the run has durable evidence.
 
 ## Bootstrap mode
 
@@ -270,6 +316,22 @@ require either corroborating current docs / issue / PR / test / human
 guidance, or a recorded Alignment Review. Also record at least one
 rejected or weak observed promise per scan, so the reviewer can see
 what was intentionally not promoted.
+
+For raw scan output or broad grep/browser findings, classify non-selected
+findings before choosing a story or halting:
+
+- `player-facing` - on the selected public/user workflow
+- `admin/operator` - operational surface; promote only for a high-value
+  operational story
+- `api-only` - response or server behavior without a selected rendered
+  surface
+- `unused/unmounted` - no current route/component usage found
+- `already-covered` - protected by a verified story or fresh regression
+- `fixture-blocked` - plausible but needs data/auth/devslot work first
+- `candidate` - worth shaping into a future story
+
+Record a compact summary in `remaining_findings_classified` before any
+`signal-starvation` halt.
 
 ### 3. Align and record judgment
 
@@ -370,14 +432,18 @@ a recorded trigger. After 2 consecutive iterations that add no new
 source, no new candidate, and no new alignment decision, force a
 re-grounding pass before further verification.
 
-**Same-family drift guard.** Track consecutive promotions that share the
-same low-visibility family, such as scoped-name-only fixes, decorative
-element classification, group/landmark labels, pending-status wording, or
-operator-only semantics. After two such promotions, the next accepted
-iteration must either move a visible/mechanical story, run a broader
-source/browser re-grounding pass to find one, or document signal starvation
-with the surfaces checked. Do not keep promoting the same family simply
-because the findings are valid.
+**Same-family drift guard.** Track `last_story_family` and
+`same_family_count` in `loop/STATE.md`. Low-visibility families include
+scoped-name-only fixes, decorative element classification, group/landmark
+labels, pending-status wording, and operator-only semantics. Recovery-copy
+or validation-copy stories are visible, but still count as the same family
+when they keep repairing the same surface and failure mode. After two
+same-family promotions, the next accepted iteration must either move a
+different visible/mechanical story, run a broader source/browser/e2e
+re-grounding pass, or document `signal-starvation` with surfaces checked.
+After three same-family promotions, block another promotion from that
+family unless the manifest records why it is higher-value than the drift
+risk and what alternate surfaces were checked.
 
 ### 5. Verify with evidence
 
@@ -389,8 +455,17 @@ run is evidence-only and cannot produce a promoted fix.
 Before capture, restate:
 
 ```text
-story id | promise | acceptance item | fixture | expected evidence | failure classification plan
+story id | promise | acceptance item | fixture mode | fixture | expected evidence | failure classification plan
 ```
+
+Declare fixture mode before running browser or Playwright evidence:
+
+- `bypass-compatible` - dummy/local auth bypass proves the selected story.
+- `requires-real-auth` - real provider/session behavior is part of the
+  claim; do not run under bypass and call it proof.
+- `admin-operator` - operational story; keep out of player-facing loops
+  unless explicitly selected.
+- `unknown` - classify as `fixture-gap` or `env-gap` before promotion.
 
 Use the narrowest proof that settles the story:
 
@@ -401,9 +476,10 @@ Use the narrowest proof that settles the story:
 - code references only for structural claims
 
 Record environment identity: branch/SHA, app URL, API URL when relevant,
-fixture, seed, browser/project, and timestamp. For local frontend apps,
-ensure the server belongs to the current checkout before capturing
-evidence.
+fixture mode, fixture, seed, browser/project, and timestamp. For local
+frontend apps, ensure the server belongs to the current checkout before
+capturing evidence. If the command/env uses a different fixture mode than
+the story declares, stop and classify `fixture-gap` or `env-gap`.
 
 For Surface Taste Lane, capture a mirrored before/after packet:
 
@@ -422,6 +498,11 @@ For Surface Taste Lane, capture a mirrored before/after packet:
 
 The after packet should repeat the same artifacts so the reviewer can
 compare the selected surface directly.
+
+After validation, update the evidence manifest with exact commands,
+artifact paths, fixture mode, pass/fail classification, and commit hash
+when available. Validate JSON manifests with `jq empty` or record why the
+repo uses a non-JSON evidence format.
 
 ### 6. Promote or handoff
 
@@ -478,6 +559,11 @@ target skill, observed gap, evidence iteration, proposed rule, why it
 generalizes, suggested patch wording, and the risk the rule could
 accidentally encourage.
 
+Before finalizing a promoted commit, check that the manifest, storyboard,
+ledger/report, focused validation, and git commit all name the same story
+and promise. Do not use passing tests as a proxy if they do not cover the
+recorded acceptance criteria.
+
 ## Surface Taste Lane
 
 Conditional — include this section when `{{LANE}} = Surface Taste Lane`.
@@ -531,9 +617,9 @@ where the repo expects ephemeral or QA evidence:
 - Do not commit screenshot piles unless the repo or user explicitly wants
   a persistent evidence packet.
 
-Every evidence packet should include a short `verdict.md` or board entry
-that answers what the evidence proves. Screenshots without a verdict are
-weak memory.
+Every promoted story should have a manifest plus a short `verdict.md` or
+board entry that answers what the evidence proves. Screenshots without a
+verdict are weak memory.
 
 ## Forbidden moves
 
@@ -569,6 +655,19 @@ When no `ready` story exists, **do not halt** — continue discovery and
 alignment-prep (see Iteration protocol §3, §4). The classification is the
 point.
 
+Before `stop-and-summarize`, perform a completion audit:
+
+- restate the objective as concrete deliverables
+- map each prompt requirement to artifacts: storyboard, state, manifest,
+  evidence paths, validation commands, commits, and classified leftovers
+- inspect the artifacts instead of relying on memory or prior summaries
+- verify manifests parse and evidence paths exist when they are named
+- check tracked git status and list any intentionally untracked local
+  loop artifacts
+- run or inspect a fresh source/browser/e2e re-grounding pass unless the
+  immediately preceding iteration already did so
+- set `halt_cause` and `halt_re-grounding` in `loop/STATE.md`
+
 Escalate (rare, irreversible-only): see the Runner contract.
 
 ### Halt-cause classifier
@@ -586,7 +685,8 @@ cause so the user (and the next derivation) can route it back:
 - `signal-starvation` — no new source, no new candidate, no new
   alignment for the configured number of consecutive iterations; the
   frontier-novelty rule forced a re-grounding pass that yielded
-  nothing.
+  nothing, and `remaining_findings_classified` records why skipped
+  findings were not promotable.
 - `wrong-loop` — the work needs a different loop (evaluator blindness
   → `frontier-loop`; known product-fail with a finite acceptance
   inventory → `goal-loop`; target itself undefined → `greenfield-loop`).
@@ -604,6 +704,9 @@ Storyboard changes:
 
 Evidence:
 - <path or link>
+
+Evidence manifest:
+- <path or none>
 
 Spawned candidates:
 - <child story id or none>

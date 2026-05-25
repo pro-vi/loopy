@@ -332,6 +332,26 @@ Default N = 3; set per repo as `{{QUIET_SIGNAL_N}}`.
 - **Benchmark / metric outputs** — machine-readable, persisted across
   iterations.
 
+### Skill Harvest
+
+When an iteration exposes a reusable process lesson — a failure mode the
+skill didn't yet name, an invariant that would have prevented drift, a
+pattern that generalizes beyond this specific run — write a **Skill
+Harvest note** to the run's artifact directory:
+
+- **target skill** — this skill, or a sibling / parent
+- **observed gap** — the rule that's missing or under-specified
+- **evidence iteration** — which iteration revealed it
+- **proposed rule** — suggested wording for the patch
+- **why it generalizes** — or note that it doesn't
+- **suggested patch wording** — drop-in text
+- **accidental-encouragement risk** — what bad behavior the new rule
+  could enable
+
+Harvest notes are the **dogfooding citations** the family's promotion-bar
+rule requires (see `README.md`). Without them, lessons from real runs
+evaporate.
+
 Location: {{ARTIFACT_LOCATIONS}}
 
 {{REVIEW_CLOSURE_OVERLAY}}

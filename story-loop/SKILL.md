@@ -29,6 +29,12 @@ can be valid support work, but repeated same-family low-visibility fixes
 are a drift signal unless they unblock a selected story or repair a
 misleading rendered contract.
 
+Durable loop mechanics live in artifacts, not memory. The emitted prompt
+should require `loop/STATE.md` to track the run shape and should write a
+small evidence manifest for each promoted story when the repo has an
+evidence directory. This makes same-family drift, fixture mode, validation,
+and halt decisions reviewable after a long run or context compaction.
+
 The storyboard is an *index of evidence and intent*, not the source of
 intent itself. Authority lives in human prompts, current docs, accepted
 issues/PRs, and reviewer guidance — re-check those before treating an old
@@ -46,7 +52,9 @@ handoff.
 - An **acceptance verifier** — verifies known acceptance criteria and
   emits evidence reports after a story has criteria.
 - An **e2e-test harness** — owns browser / dev-server mechanics when
-  verifying a running app.
+  verifying a running app. Story Loop records the selected fixture mode
+  and classifies mode mismatches as `fixture-gap` or `env-gap`, not
+  product failure.
 - An **implementation skill** (e.g. `goal-loop` for a finite acceptance
   inventory, or any host-provided builder) — may fix larger product
   failures after Story Loop classifies them. Story Loop itself may still
@@ -195,7 +203,9 @@ Return:
   unchanged.
 - `loop/STATE.md` — phase, iteration counter, selected lane, selected
   surface, current story (`none` initially), last action, next action,
-  and a `Next action: HALT` exit hatch the user controls.
+  same-family counters, fixture mode, evidence manifest pointer, latest
+  validation commands, remaining finding classifications, and a
+  `Next action: HALT` exit hatch the user controls.
 - A short rationale: chosen lane, chosen surface class, chosen storyboard
   path/format, whether the proof surface is ready or which gap blocks
   verification.
@@ -212,6 +222,8 @@ Invoked to diagnose a drifting Story Loop (not author a new prompt):
    authority? Repeated re-verification of easy stories? Broad QA sweep
    masquerading as verification? Verification on unaligned candidates?
    Same-family semantic cleanup crowding out story / feature movement?
+   Missing mechanical state? Missing fixture-mode declaration? Missing
+   or unparseable evidence manifests? Process/session leakage?
    Escalate-polling where judgment should default?
 4. Emit a *minimal* PROMPT.md mutation that closes the failure mode —
    not a full rewrite. The hand-evolved prompt has hard-won lessons; the

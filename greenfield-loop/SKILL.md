@@ -435,6 +435,12 @@ When invoked on a drifting loop:
    retrofit adds what's missing without losing them.
 5. Write to `loop/STATE.md` a ⚠️ block telling the next iteration what
    changed and what to do differently.
+6. **Skill Harvest.** If the retrofit teaches a lesson that generalizes
+   beyond this run, write a Skill Harvest note: target skill · observed
+   gap · evidence iteration · proposed rule · why it generalizes ·
+   suggested patch wording · accidental-encouragement risk. Harvest notes
+   are the dogfooding citations the family's promotion-bar rule requires
+   (see `README.md` and the sibling templates).
 
 ## Anti-patterns
 
