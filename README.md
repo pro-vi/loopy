@@ -1,8 +1,8 @@
-# loopy
+# loopgen
 
 Prompt generators for `/goal` and `/loop`.
 
-`loopy` is a small family of Claude Code skills that **derive repo-specific
+`loopgen` is a small family of Claude Code skills that **derive repo-specific
 prompts for autonomous improvement loops**. The skills do not run the loop —
 they author the prompt (and the invariants) that a **runner** then executes.
 `/loop`, `/goal`, and external harnesses (gnhf, cocc, ralph) are all valid
@@ -90,10 +90,10 @@ Rough routing: **finite known target →** `goal-loop` · **target undefined →
 Clone, then symlink the skills into your agent's skills directory:
 
 ```sh
-git clone git@github.com:pro-vi/loopy.git
+git clone git@github.com:pro-vi/loopgen.git
 for s in frontier-loop goal-loop greenfield-loop story-loop; do
-  ln -s "$PWD/loopy/$s" ~/.claude/skills/$s      # Claude Code
-  ln -s "$PWD/loopy/$s" ~/.codex/skills/$s       # Codex (optional)
+  ln -s "$PWD/loopgen/$s" ~/.claude/skills/$s      # Claude Code
+  ln -s "$PWD/loopgen/$s" ~/.codex/skills/$s       # Codex (optional)
 done
 ```
 
