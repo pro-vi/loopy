@@ -4,8 +4,10 @@
 
 The frontier-model consult channel available in the host, so the composed
 prompt schedules consults only when they exist and degrades gracefully
-otherwise (the bodytxt learning). Weight 1, and **environment-detected** — not
-archetype-defaulted.
+otherwise (the bodytxt learning). **Environment-detected, not
+archetype-varying** — it is a composition *overlay* that changes which sections
+Phase 3 emits, and does **not** contribute to the classifier's weighted-Hamming
+distance.
 
 ## Values
 
