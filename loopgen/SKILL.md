@@ -114,10 +114,18 @@ halt-cause classifier flags `derivation-gap` halts so the next pass closes it.
 4. **Name divergences.** Every axis whose value differs from the nearest
    archetype's default is a divergence; record `axis → value (source-archetype
    or "task")`.
-5. **Ties = genuine hybrid.** If two archetypes are equidistant, the task is a
-   real hybrid (e.g. bodytxt = frontier+story): pick the higher-weight-match
-   archetype as the shorthand and name the other's contributions as divergences.
-   If still genuinely ambiguous, fire AskUserQuestion with the two candidates.
+5. **Ties = genuine hybrid.** A genuine hybrid is *equidistant* (or near-equal,
+   margin ≤1) between two archetypes — e.g. distance 5 to one and 5–6 to another.
+   There, pick the higher-weight-match archetype as the shorthand and name the
+   other's contributions as divergences; if still ambiguous, fire AskUserQuestion
+   with the two candidates. Do **not** treat a low-distance task as a hybrid: a
+   task at distance 3 from story and 9 from everything else (e.g. bodytxt — a
+   story loop with a `frontier-expanding` target) is **story with one
+   divergence**, not a frontier+story tie. No equidistant hybrid has yet been
+   observed in a real run; until one is, a large margin means snap decisively to
+   the nearest. (These distances are exact arithmetic over the matrix above —
+   the eyeball that once called bodytxt a "hybrid" is the failure mode computing
+   them guards against.)
 
 Emit a structured classification: `{archetype, divergences[], consult-tier,
 evaluator-tier}`. No silent defaults — every divergence is visible.
@@ -148,6 +156,35 @@ nearest archetype's extra artifact(s):
 
 If the user invoked mid-conversation without asking to save, emit **chat-only**
 with an offer to write the files.
+
+### The kick-off (runner invocation)
+
+After emitting, give the operator the **pointer kick-off** — the line they paste
+into a runner to start the loop. It is a **bare pointer**: the runner verb, the
+path to the prompt, and a one-phrase identity. Nothing else.
+
+> `/<runner> read loop/PROMPT.md and execute as <one-phrase loop identity>.`
+>
+> e.g. `/goal read loop/PROMPT.md and execute as the hybrid-pareto benchmarking loop.`
+
+A runner (`/goal`, `/loop`, gnhf, ralph, cocc) re-sends the *same* prompt every
+iteration (see `primitives/runner-contract.md`), so the kick-off must be
+**iteration-agnostic** and carry **no instruction content** — every rule (which
+file is the goal, where `STATE.md` is, the iteration protocol, the bootstrap
+gate) lives in `loop/PROMPT.md`, the single source. If you are tempted to add a
+clause to the kick-off ("…and start with…", "…loop/STATE.md tells you where you
+are"), put it in `PROMPT.md` instead. NEVER bake first-iteration language into
+the kick-off ("begin with the bootstrap", "first, instantiate…") — on iteration 2
+it mis-fires, re-running one-time setup.
+
+This only works if `PROMPT.md` is **re-entrant**: all bootstrap /
+inventory-instantiation / one-time work must be **self-gated on durable state** in
+`loop/STATE.md` (`iteration: 0`, "no inventory / storyboard / ledger yet"), run
+once then skipped. The canonical self-gate shape is story-body's `## Bootstrap
+mode` (enter when the artifact doesn't exist; exit when the first unit can
+advance); every archetype with iteration-0 setup (goal-inventory,
+greenfield-preloop, frontier-ledger-seed) needs the same gate — verify the
+composed `PROMPT.md` has it before emitting, or the pointer kick-off is unsafe.
 
 Then present the menu:
 

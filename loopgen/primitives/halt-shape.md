@@ -15,8 +15,8 @@ prompt names both.
   on strong new signal (externally reviewed finding, typed failing trace, oracle
   verdict, metric movement).
 - `checkpoint-with-reopen` — halts on convergence but explicitly reopens when a
-  new authoritative source / route / fixture appears (the story shape; adopted
-  by the bodytxt hybrid).
+  new authoritative source / route / fixture appears (the story shape; bodytxt
+  keeps it, sourced from story).
 - `manual-gated` — the loop persists by design and only the human ends it, via a
   `Next action: HALT` hatch (owner: user).
 
@@ -44,8 +44,8 @@ prompt names both.
   ends is not terminal.
 - Orthogonal to `convergence-shape`: one names the reopen policy, the other the
   stop signal. Provenance lists both when either diverges.
-- `checkpoint-with-reopen` is `story`'s default, which is why the bodytxt
-  frontier+story hybrid sources it from the story archetype (not as a brand-new
-  value).
+- `checkpoint-with-reopen` is `story`'s default, which is why bodytxt (a story
+  loop with a `frontier-expanding` target) sources it from the story archetype
+  (not as a brand-new value).
 - **Contradiction** (ask the user): `equilibrium`/`manual-gated` with
   `target-shape: finite-criteria`.

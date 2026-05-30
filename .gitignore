@@ -3,6 +3,7 @@
 # local / ephemeral — not part of the skill
 .inbox/
 .research/
+dev/
 **/logs/
 
 # machine-local tooling state (never commit)

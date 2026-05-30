@@ -68,22 +68,30 @@ and blocks promotion until the design is revised.
 - **Must contain:** all 11 invariants, score-locked ramp, score quarantine,
   CAPABILITY mode, preloop/research phase gates with owners.
 
-### 5. Hybrid — bodytxt (frontier + story)
+### 5. Cross-archetype divergence — bodytxt (story body, frontier-expanding target)
 
 - **Task:** "Build an incremental gallery of pretext demos with overnight
   chapter cadence and frontier-model consults; keep evidence discipline."
-- **Expected bundle:** `target=frontier-expanding (frontier),
-  artifact=storyboard (story), halt=checkpoint-with-reopen (story),
-  convergence=capstone-plus-closer (story), cadence=chapter (story),
+- **Expected bundle:** `target=frontier-expanding, halt=checkpoint-with-reopen,
+  artifact=storyboard, convergence=capstone-plus-closer, cadence=chapter,
   consult=tier-3`.
-- **Classification:** nearest `frontier`; divergences `cadence: chapter (story);
-  convergence: capstone-plus-closer (story); halt-shape: checkpoint-with-reopen
-  (story); artifact-shape: storyboard (story)`.
-- **Must contain:** frontier homeostasis frame **and** story chapter cadence +
-  capstone-plus-closer convergence + checkpoint-with-reopen halt + a storyboard
-  artifact; the provenance preamble names all four divergences + their source.
-- This is the case that justifies the whole skill — no single legacy skill
-  could compose it.
+- **Classification:** nearest `story`, **distance 3** (margin 6 — frontier is 9,
+  goal/greenfield 12). Single divergence: `target-shape: frontier-expanding`
+  (only the target axis leaves the story defaults; halt / artifact / convergence
+  / cadence are all pure story). Verify by computing the weighted-Hamming
+  distances on the bundle (story 3 vs frontier 9 — not a tie).
+- **Must contain:** the **story** body (storyboard artifact, chapter cadence,
+  capstone-plus-closer convergence, checkpoint-with-reopen halt) with the
+  `target-shape` swapped to `frontier-expanding`; the provenance preamble names
+  that one divergence + its source. It must **NOT** carry a frontier homeostasis
+  frame — nearest is story, so the body is the story body, not a frontier body.
+- This case demonstrates the new capability: a story loop with a
+  `frontier-expanding` target is a cross-archetype divergence no single legacy
+  skill composed (`story-loop`'s target was always `promise-discovery`). It is
+  **not** an equidistant hybrid — bodytxt sits firmly in story (distance 3,
+  margin 6). A genuine equidistant hybrid (distance ~5–6 to its nearest, margin
+  ≤1 to the second) has not yet been observed in a real run; if one appears,
+  add it here as the equidistant case.
 
 ### 6. Tier-0 consult degradation (any archetype)
 

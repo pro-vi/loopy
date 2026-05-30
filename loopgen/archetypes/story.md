@@ -21,8 +21,8 @@ project-management digest; it biases toward actual story / feature movement.
 
 `halt-shape: checkpoint-with-reopen` and `convergence-shape:
 capstone-plus-closer` are this archetype's defaults (the bodytxt learning) —
-which is why the bodytxt frontier+story hybrid **sources them from `story`**,
-not as brand-new values.
+which is why bodytxt (a story loop with a `frontier-expanding` target) **sources
+them from `story`**, not as brand-new values.
 
 ## Forbidden divergences
 
