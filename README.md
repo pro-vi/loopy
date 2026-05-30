@@ -4,7 +4,7 @@ Your loop died 10 minutes after you went to sleep. Blocked on a decision you cou
 
 loopgen writes the prompt so it doesn't.
 
-Hand it whatever you're trying to do: close a spec, push a benchmark, walk a frontend, build a vague idea. It works out which kind of loop that is, writes the prompt and the invariants, and resolves the decisions that would've stalled the loop ten minutes in. Hand the result to a runner (`/goal` in Claude Code or Codex, or any ralph-based harness) and go to sleep. loopgen doesn't run the loop. It makes sure the loop survives the night.
+Hand it whatever you're trying to do: close a spec, push a benchmark, walk a frontend, build a vague idea. It works out which kind of loop that is, writes the prompt and the invariants, and resolves the decisions that would've stalled the loop 10 minutes in. Hand the result to a runner (`/goal` in Claude Code or Codex, or any ralph-based harness) and go to sleep. loopgen doesn't run the loop. It makes sure the loop survives the night.
 
 ## Install
 
@@ -32,7 +32,7 @@ Pick by what you hand the loop, but you don't have to. loopgen classifies for yo
 3. **Compose.** Start from the archetype body, apply per-axis divergence patches, prepend the provenance preamble.
 4. **Emit.** One self-contained prompt, ready for any runner.
 
-The primitive vocabulary (five varying axes: target / halt / convergence / artifact / cadence, plus an environment-detected consult tier that overlays composition rather than steering classification), the four archetype definitions, the assembler, and the four emittable bodies all live under [`loopgen/`](loopgen/SKILL.md).
+The primitive vocabulary (the five axes the classifier scores on: target / halt / artifact / convergence / cadence; plus a consult tier the environment supplies, which overlays composition rather than steering classification), the four archetype definitions, the assembler, and the four emittable bodies all live under [`loopgen/`](loopgen/SKILL.md).
 
 ### The archetypes, in full
 
